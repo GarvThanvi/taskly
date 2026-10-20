@@ -1,6 +1,6 @@
-import Link from "next/link";
+import { Suspense } from "react";
 import "./globals.css";
-
+import Navbar from "./navbar";
 export const metadata = {
   title: "Taskly",
   description: "A small task manager",
@@ -15,10 +15,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-background text-foreground">
         <header className="border-b">
-          <nav className="mx-auto flex max-w-3xl items-center gap-4 p-4">
-            <Link href="/">Taskly</Link>
-            <Link href="/tasks">Tasks</Link>
-          </nav>
+          <Suspense>
+            <Navbar></Navbar>
+          </Suspense>
         </header>
         <main className="mx-auto max-w-3xl p-4">{children}</main>
       </body>

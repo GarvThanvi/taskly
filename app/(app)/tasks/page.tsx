@@ -2,12 +2,7 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
-const tasks = [
-  { id: '1', title: 'Learn routing', notes: 'Pages, layouts, dynamic routes', priority: 'high', done: false },
-  { id: '2', title: 'Set up shadcn/ui', notes: 'Button, Card, Badge', priority: 'medium', done: true },
-  { id: '3', title: 'Read about server components', notes: 'Module 3', priority: 'low', done: false },
-];
+import { getTasks } from '@/lib/tasks';
 
 const priorityVariant = {
   high: 'destructive',
@@ -15,7 +10,8 @@ const priorityVariant = {
   low: 'secondary',
 } as const;
 
-export default function TasksPage() {
+export default async function TasksPage() {
+  const tasks = await getTasks();
   return (
     <div className='space-y-4'>
       <h1 className='text-2xl font-semibold'>Tasks</h1>
