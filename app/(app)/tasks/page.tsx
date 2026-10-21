@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getTasks } from '@/lib/tasks';
+import { TaskForm } from '@/components/task-form';
 
 const priorityVariant = {
   high: 'destructive',
@@ -15,7 +16,7 @@ export default async function TasksPage() {
   return (
     <div className='space-y-4'>
       <h1 className='text-2xl font-semibold'>Tasks</h1>
-
+      <TaskForm></TaskForm>
       {tasks.map((task) => (
         <Link key={task.id} href={`/tasks/${task.id}`} className='block'>
           <Card className='transition-colors hover:bg-muted/50'>
