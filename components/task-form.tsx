@@ -18,6 +18,7 @@ export function TaskForm() {
     setError,
     formState: { errors },
   } = useForm<TaskInput>({
+    resolver: zodResolver(taskSchema),
     defaultValues: { title: "", priority: "medium" },
   });
   const onSubmit = (values: TaskInput) =>
