@@ -25,8 +25,8 @@ export default async function TasksPage() {
       <h1 className="text-2xl font-semibold">Tasks</h1>
       <TaskForm></TaskForm>
       {tasks.map((task) => (
-        <div>
-          <Link key={task.id} href={`/tasks/${task.id}`} className="block">
+        <div key={task.id}>
+          <Link href={`/tasks/${task.id}`} className="block">
             <Card className="transition-colors hover:bg-muted/50">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -56,7 +56,7 @@ export default async function TasksPage() {
               </CardContent>
             </Card>
           </Link>
-          <DeleteTaskButton />
+          <DeleteTaskButton taskId={task.id} />
         </div>
       ))}
     </div>
