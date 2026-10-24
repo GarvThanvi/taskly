@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "./navbar";
 import { Toaster } from "sonner";
+import { Providers } from "@/components/providers";
 export const metadata = {
   title: "Taskly",
   description: "A small task manager",
@@ -21,7 +22,9 @@ export default function RootLayout({
             <Navbar></Navbar>
           </Suspense>
         </header>
-        <main className="mx-auto max-w-3xl p-4">{children}</main>
+        <Providers>
+          <main className="mx-auto max-w-3xl p-4">{children}</main>
+        </Providers>
       </body>
     </html>
   );
