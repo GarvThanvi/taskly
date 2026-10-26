@@ -64,9 +64,18 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { useQueryClient } from "@tanstack/react-query";
 import { tasksKey } from "@/hooks/use-tasks";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "./ui/dialog";
+import { useUiStore } from "@/store/ui-store";
 
 export function TaskForm() {
   const qc = useQueryClient();
+
+  const createOpen = useUiStore((s) => s.createOpen);
+  const setCreateOpen = useUiStore((s) => s.setCreateOpen);
 
   const actionFn = async (
     prevState: ActionResult | null,
@@ -79,7 +88,10 @@ export function TaskForm() {
     };
 
     const res = await createTask(values);
-    if (res.ok) qc.invalidateQueries({ queryKey: tasksKey });
+    if (res.ok){
+      qc.invalidateQueries({ queryKey: tasksKey });
+      setCreateOpen(!createOpen)
+    }
     return res;
   };
   const [state, formAction, pending] = useActionState(actionFn, null);
@@ -91,31 +103,38 @@ export function TaskForm() {
   }, [state]);
 
   return (
-    <form
-      action={formAction}
-      key={state?.ok ? Date.now() : "form"}
-      className="space-y-3"
-    >
-      <div>
-        <Label htmlFor="title">Title</Label>
-        <Input id="title" name="title" defaultValue="" />
-        {state && !state.ok && state?.errors?.title && (
-          <p className="text-sm text-destructive">{state.errors.title[0]}</p>
-        )}
-      </div>
-      <select
-        defaultValue="medium"
-        name="priority"
-        className="rounded-md border p-2"
-      >
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <Input type="date" name="dueDate" />
-      <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : "Add task"}
-      </Button>
-    </form>
+    <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+      <DialogTrigger>Open Form</DialogTrigger>
+      <DialogContent>
+        <form
+          action={formAction}
+          key={state?.ok ? Date.now() : "form"}
+          className="space-y-3"
+        >
+          <div>
+            <Label htmlFor="title">Title</Label>
+            <Input id="title" name="title" defaultValue="" />
+            {state && !state.ok && state?.errors?.title && (
+              <p className="text-sm text-destructive">
+                {state.errors.title[0]}
+              </p>
+            )}
+          </div>
+          <select
+            defaultValue="medium"
+            name="priority"
+            className="rounded-md border p-2"
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <Input type="date" name="dueDate" />
+          <Button type="submit" disabled={pending}>
+            {pending ? "Saving..." : "Add task"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

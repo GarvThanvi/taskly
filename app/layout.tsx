@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./navbar";
 import { Toaster } from "sonner";
 import { Providers } from "@/components/providers";
+import ToggleCreate from "@/components/toggle-create-form";
 export const metadata = {
   title: "Taskly",
   description: "A small task manager",
@@ -21,6 +22,7 @@ export default function RootLayout({
           <Suspense>
             <Navbar></Navbar>
           </Suspense>
+          <ToggleCreate></ToggleCreate>
         </header>
         <Providers>
           <main className="mx-auto max-w-3xl p-4">{children}</main>

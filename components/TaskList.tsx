@@ -33,6 +33,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const setStatus = useUiStore((s) => s.setStatus);
   const setPriority = useUiStore((s) => s.setPriority);
 
+
   const handleDelete = (id: string) => {
     deleteTask(
       { id },
