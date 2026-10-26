@@ -15,6 +15,7 @@ import DeleteTaskButton from "@/components/delete-task-button";
 import { TaskForm } from "@/components/task-form";
 import { useDeleteTask, useTasks, useToggleTask } from "@/hooks/use-tasks";
 import { toast } from "sonner";
+import { useUiStore } from "@/store/ui-store";
 
 const priorityVariant = {
   high: "destructive",
@@ -22,14 +23,15 @@ const priorityVariant = {
   low: "secondary",
 } as const;
 
-export default function TaskList({
-  initialTasks,
-}: {
-  initialTasks: Task[];
-}) {
+export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const { data: tasks = initialTasks } = useTasks(initialTasks);
   const { mutate: toggleTask } = useToggleTask();
   const { mutate: deleteTask } = useDeleteTask();
+
+  const status = useUiStore((s) => s.status);
+  const priority = useUiStore((s) => s.priority);
+  const setStatus = useUiStore((s) => s.setStatus);
+  const setPriority = useUiStore((s) => s.setPriority);
 
   const handleDelete = (id: string) => {
     deleteTask(
@@ -40,7 +42,6 @@ export default function TaskList({
       }
     );
   };
-  
 
   return (
     <div className="space-y-4">
@@ -51,9 +52,7 @@ export default function TaskList({
         <div key={task.id} className="flex items-start gap-3">
           <Checkbox
             checked={task.done}
-            onCheckedChange={(done) =>
-              toggleTask({ id: task.id, done })
-            }
+            onCheckedChange={(done) => toggleTask({ id: task.id, done })}
             aria-label={`Mark ${task.title} as ${
               task.done ? "not done" : "done"
             }`}
@@ -66,9 +65,7 @@ export default function TaskList({
                 <div className="flex items-center justify-between">
                   <CardTitle
                     className={
-                      task.done
-                        ? "line-through text-muted-foreground"
-                        : ""
+                      task.done ? "line-through text-muted-foreground" : ""
                     }
                   >
                     {task.title}
